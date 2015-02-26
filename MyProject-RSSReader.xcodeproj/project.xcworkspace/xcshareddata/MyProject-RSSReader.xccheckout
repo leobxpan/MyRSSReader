@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>640F3A45-C613-4751-A2E0-4CBF187345F0</string>
+	<key>IDESourceControlProjectName</key>
+	<string>MyProject-RSSReader</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C9DBFC9E4581C0FAD79F2D88683BD245CD8E530E</key>
+		<string>https://github.com/CaesarPan/myCalculator-iOS.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>MyProject-RSSReader/MyProject-RSSReader.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C9DBFC9E4581C0FAD79F2D88683BD245CD8E530E</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/CaesarPan/myCalculator-iOS.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C9DBFC9E4581C0FAD79F2D88683BD245CD8E530E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C9DBFC9E4581C0FAD79F2D88683BD245CD8E530E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>objective-c</string>
+		</dict>
+	</array>
+</dict>
+</plist>
