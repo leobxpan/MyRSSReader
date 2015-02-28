@@ -74,8 +74,6 @@
         self.currentSection = [NSMutableDictionary dictionary];
     }else if([elementName isEqualToString:@"item"]){
         [self.currentSection removeAllObjects];
-    }else if([elementName isEqualToString:@"p"]){
-        NSLog(@"1");
     }
 }
 
@@ -141,6 +139,8 @@
         NSString *string = [array[indexPath.row][@"link"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         //NSLog(@"%@",string);
         [[segue destinationViewController] setUrl:string];
+        [[segue destinationViewController] setCollectFunc:[[collectArticles sharedInstance]initWithTempArticles:[@{[array[indexPath.row][@"link"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] : [array[indexPath.row][@"title"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]}mutableCopy]]];
+        
         //NSLog(@"%@-%@",array[indexPath.row][@"title"],array[indexPath.row][@"p"]);
         //[[segue destinationViewController]setArticleTitleString:array[indexPath.row][@"title"]];
         //[[segue destinationViewController]setArticleBodyString:array[indexPath.row][@"description"]];

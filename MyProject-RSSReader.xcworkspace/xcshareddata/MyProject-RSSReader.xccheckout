@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>640F3A45-C613-4751-A2E0-4CBF187345F0</string>
+	<string>D57C9161-102A-4AF1-92A0-201487F692E8</string>
 	<key>IDESourceControlProjectName</key>
 	<string>MyProject-RSSReader</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -16,13 +16,13 @@
 		<string>https://github.com/CaesarPan/MyRSSReader.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>MyProject-RSSReader.xcodeproj</string>
+	<string>MyProject-RSSReader.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>C9DBFC9E4581C0FAD79F2D88683BD245CD8E530E</key>
-		<string>../../..</string>
-		<key>F4AAD8A5656961C1004F021469385CBC094920B4</key>
 		<string>../..</string>
+		<key>F4AAD8A5656961C1004F021469385CBC094920B4</key>
+		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/CaesarPan/MyRSSReader.git</string>

@@ -85,19 +85,30 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lPH-ve-wZB">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="11" width="414" height="725"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Bja-vi-c2Q" appends="YES" id="vT2-q1-HrP"/>
+                                </connections>
                             </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Web Page" id="XgW-Up-Ygw"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="webView" destination="lPH-ve-wZB" id="hm2-Cy-CKR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kv7-Wc-iGM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="Bja-vi-c2Q">
+                    <connections>
+                        <action selector="swipe:" destination="W1V-0K-wXB" id="OwR-1H-mfz"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2885" y="321"/>
         </scene>
@@ -125,7 +136,20 @@
                             <outlet property="delegate" destination="DGn-Eo-qBn" id="GhN-tE-EBg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Feeds" id="fob-CR-Vr8"/>
+                    <navigationItem key="navigationItem" title="Feeds" id="fob-CR-Vr8">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="Ykz-Yp-itN">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FaN-8C-ixG">
+                                <rect key="frame" x="16" y="7" width="19" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="burger.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickBurger" destination="DGn-Eo-qBn" eventType="touchUpInside" id="CQr-4d-G0o"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V7X-hh-mjN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -152,4 +176,7 @@
             <point key="canvasLocation" x="1335" y="321"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="burger.png" width="19" height="17"/>
+    </resources>
 </document>

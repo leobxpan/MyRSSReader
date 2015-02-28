@@ -24,6 +24,7 @@ static int recordOrder = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.feedInformation = [NSMutableArray array];
     self.parserDictionary = [NSMutableDictionary dictionary];
     self.feeds = [[NSMutableArray alloc]initWithObjects:
@@ -46,6 +47,28 @@ static int recordOrder = 0;
     // self.clearsSelectionOnViewWillAppear = NO;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (IBAction)clickBurger {
+    
+    NSArray *images = @[
+                        //[UIImage imageNamed:@"gear"],
+                        [UIImage imageNamed:@"globe"],
+                        //[UIImage imageNamed:@"profile"],
+                        [UIImage imageNamed:@"star"]
+                        ];
+    
+    RNFrostedSidebar *callout = [[RNFrostedSidebar alloc] initWithImages:images];
+    callout.delegate = self;
+    [callout show];
+
+}
+
+- (void)sidebar:(RNFrostedSidebar *)sidebar didTapItemAtIndex:(NSUInteger)index {
+    if (index == 1) {
+        [sidebar dismissAnimated:NO];
+        NSLog(@"1");
+    }
 }
 
 -(void)getData : (NSString *)urlString

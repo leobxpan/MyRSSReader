@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AFNetworking.h"
 #import "StoryTableViewController.h"
+#import <RNFrostedSidebar.h>
 
 @interface FeedsTableTableViewController : UITableViewController<NSXMLParserDelegate>
 

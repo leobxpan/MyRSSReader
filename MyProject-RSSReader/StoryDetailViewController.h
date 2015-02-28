@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "collectArticles.h"
+#import <RNFrostedSidebar.h>
 
 @interface StoryDetailViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIWebView *webView;
 @property (copy,nonatomic) NSString *url;
+@property collectArticles *collectFunc;
 
 @end
 
