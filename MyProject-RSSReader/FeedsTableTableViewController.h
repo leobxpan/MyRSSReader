@@ -10,7 +10,8 @@
 #import "AFNetworking.h"
 #import "StoryTableViewController.h"
 #import <RNFrostedSidebar.h>
+#import <MBProgressHUD.h>
 
-@interface FeedsTableTableViewController : UITableViewController<NSXMLParserDelegate>
+@interface FeedsTableTableViewController : UITableViewController<NSXMLParserDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
 
 @end

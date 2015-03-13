@@ -8,6 +8,10 @@
 
 #import "collectArticles.h"
 
+@interface collectArticles()
+
+@end
+
 @implementation collectArticles
 
 +(collectArticles *)sharedInstance{

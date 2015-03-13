@@ -9,10 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "AFNetworking.h"
 #import "StoryDetailViewController.h"
-#import "ArticleViewController.h"
+#import "collectArticles.h"
+#import <SWTableViewCell.h>
+#import <RNFrostedSidebar.h>
+#import <MBProgressHUD.h>
 
-@interface StoryTableViewController : UITableViewController<NSXMLParserDelegate>
+@interface StoryTableViewController : UITableViewController<NSXMLParserDelegate>//,SWTableViewCellDelegate>
 
 @property NSString *urlString;
+@property NSString *currentFeedTitle;
 
 @end

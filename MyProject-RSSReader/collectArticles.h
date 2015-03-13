@@ -14,6 +14,11 @@
 @property NSMutableDictionary *collectedArticles;
 @property NSArray *sideBarImages;
 @property NSArray *sideBarImagesNames;
+@property NSMutableArray *haveReadArticlesUrls;
+@property NSMutableArray *RSSfeeds;
+@property NSMutableArray *feedsTitleArray;
+@property NSInteger *recordAddedNewFeedsOrNot;
+@property NSInteger *helpRecordAddedNewFeedsOrNot;
 
 +(collectArticles *)sharedInstance;
 -(collectArticles *)initWithTempArticles : (NSMutableDictionary *)tempArticles;

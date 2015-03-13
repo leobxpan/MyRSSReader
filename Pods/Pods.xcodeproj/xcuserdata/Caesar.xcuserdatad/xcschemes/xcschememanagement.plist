@@ -4,7 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Pods-LBBlurredImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-MBProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-RNFrostedSidebar.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-SWTableViewCell.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -17,12 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>94B1B07AD44A0CA28DB67182</key>
+		<key>024886AC5CE1B5FF44157A12</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E141A47A47C284BB18A71B4E</key>
+		<key>4CEA876DA351F1651739C061</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8CED42A67E7340B817BDD4E6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E253FADF446125D0B4C68DFC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E70BD7A61E61C187E77E4656</key>
 		<dict>
 			<key>primary</key>
 			<true/>

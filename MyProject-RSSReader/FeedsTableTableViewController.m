@@ -15,47 +15,73 @@
 @property NSMutableArray *feeds;
 @property NSMutableArray *feedInformation;
 @property NSMutableDictionary *parserDictionary;
+@property (strong,nonatomic) NSMutableArray *filteredFeedsTitleArray;
+@property (strong, nonatomic) IBOutlet UISearchBar *feedSearchBar;
 
 @end
 
 @implementation FeedsTableTableViewController
 
 static int recordOrder = 0;
+static int recordViewAppear = 0;
+
+-(void)viewWillAppear:(BOOL)animated{
+    if((!recordViewAppear) && ([collectArticles sharedInstance].recordAddedNewFeedsOrNot - [collectArticles sharedInstance].helpRecordAddedNewFeedsOrNot)){
+        [self.feedInformation removeAllObjects];
+        [MBProgressHUD showHUDAddedTo:self.tableView animated:YES];
+        [collectArticles sharedInstance].helpRecordAddedNewFeedsOrNot = [collectArticles sharedInstance].recordAddedNewFeedsOrNot;
+        for(int i=0;i<[[collectArticles sharedInstance].RSSfeeds count];i++){
+            [self getData:[collectArticles sharedInstance].RSSfeeds[i]];
+        }
+        [self.tableView reloadData];
+    }
+    recordViewAppear = 0;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    recordViewAppear = 1;
+    [collectArticles sharedInstance].helpRecordAddedNewFeedsOrNot = 0;
+    [collectArticles sharedInstance].recordAddedNewFeedsOrNot = 0;
+    self.filteredFeedsTitleArray = [NSMutableArray arrayWithCapacity:[self.feeds count]];
     
     self.feedInformation = [NSMutableArray array];
     self.parserDictionary = [NSMutableDictionary dictionary];
-    self.feeds = [[NSMutableArray alloc]initWithObjects:
-                  @"http://images.apple.com/main/rss/hotnews/hotnews.rss",
-                  @"http://songshuhui.net/feed",
-                  @"http://meiwenrishang.com/rss",
-                  @"http://www.zhihu.com/rss",
-                  @"http://www.matrix67.com/blog/feed",
-                  @"http://www.nbweekly.com/rss/smw/",
-                  @"http://zaobao.feedsportal.com/c/34003/f/616931/index.rss",
-                  @"http://zaobao.feedsportal.com/c/34003/f/616930/index.rss",
-                  nil];
-    //NSLog(@"%@_%@_%@",self.feeds[0],self.feeds[1],self.feeds[2]);
-    //NSLog(@"%lu",self.feeds.count);
-    for(int i=0;i<[self.feeds count];i++){
-        [self getData:self.feeds[i]];
-        //NSLog(@"%@",self.feeds[i]);
+    NSArray *array = @[@"http://images.apple.com/main/rss/hotnews/hotnews.rss",
+                     @"http://songshuhui.net/feed",
+                     @"http://meiwenrishang.com/rss",
+                     @"http://www.zhihu.com/rss",
+                     @"http://www.matrix67.com/blog/feed",
+                     @"http://www.nbweekly.com/rss/smw/",
+                     @"http://zaobao.feedsportal.com/c/34003/f/616931/index.rss",
+                     @"http://zaobao.feedsportal.com/c/34003/f/616930/index.rss"
+                       ];
+    if(![collectArticles sharedInstance].RSSfeeds){
+        [collectArticles sharedInstance].RSSfeeds = [[NSMutableArray alloc]initWithArray:array];
     }
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [MBProgressHUD showHUDAddedTo:self.tableView animated:YES];
+
+    for(int i=0;i<[[collectArticles sharedInstance].RSSfeeds count];i++){
+        [self getData:[collectArticles sharedInstance].RSSfeeds[i]];
+    }
 }
+- (IBAction)swipe:(UISwipeGestureRecognizer *)sender {
+    
+    NSArray *images = @[
+                        [UIImage imageNamed:@"collect"]
+                        ];
+    
+    RNFrostedSidebar *callout = [[RNFrostedSidebar alloc] initWithImages:images];
+    callout.delegate = self;
+    [callout show];
+    
+}
+
 
 - (IBAction)clickBurger {
     
     NSArray *images = @[
-                        //[UIImage imageNamed:@"gear"],
-                        [UIImage imageNamed:@"globe"],
-                        //[UIImage imageNamed:@"profile"],
-                        [UIImage imageNamed:@"star"]
+                        [UIImage imageNamed:@"collect"]
                         ];
     
     RNFrostedSidebar *callout = [[RNFrostedSidebar alloc] initWithImages:images];
@@ -65,9 +91,9 @@ static int recordOrder = 0;
 }
 
 - (void)sidebar:(RNFrostedSidebar *)sidebar didTapItemAtIndex:(NSUInteger)index {
-    if (index == 1) {
+    if (index == 0) {
         [sidebar dismissAnimated:NO];
-        NSLog(@"1");
+        [self performSegueWithIdentifier:@"showCollectedArticles" sender:nil];
     }
 }
 
@@ -94,6 +120,7 @@ static int recordOrder = 0;
                                                   cancelButtonTitle:@"Ok"
                                                   otherButtonTitles:nil];
         [alertView show];
+        [MBProgressHUD hideHUDForView:self.tableView animated:YES];
         
     }];
     
@@ -114,7 +141,6 @@ static int recordOrder = 0;
         recordOrder++;
         [parser abortParsing];
         [self.tableView reloadData];
-        //NSLog(@"%lu",[self.feedInformation count]);
     }
 }
 
@@ -124,109 +150,138 @@ static int recordOrder = 0;
 
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName{
     if(elementName){
-        self.currentSection[elementName] = [[self.storyString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]] copy];
+        if([elementName isEqualToString:@"title"]){
+            if([collectArticles sharedInstance].feedsTitleArray == nil){
+                [collectArticles sharedInstance].feedsTitleArray = [NSMutableArray array];
+                [[collectArticles sharedInstance].feedsTitleArray addObject:[[self.storyString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] copy]];
+            }else{
+                int recordIfTitleHasBeenAround = 0;
+                for(int i=0;i<[[collectArticles sharedInstance].feedsTitleArray count];i++){
+                    if([[self.storyString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:[collectArticles sharedInstance].feedsTitleArray[i]]){
+                        recordIfTitleHasBeenAround = 1;
+                        break;
+                    }
+                }
+                if(!recordIfTitleHasBeenAround){
+                    [[collectArticles sharedInstance].feedsTitleArray addObject:[[self.storyString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] copy]];
+                }
+            }
+        }
+        self.currentSection[elementName] = [[self.storyString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] copy];
         self.storyString = [NSMutableString string];
     }
 }
 
 -(void)parserDidEndDocument:(NSXMLParser *)parser{
-    //NSLog(@"%@",self.feedInformation[1][@"title"]);
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    //NSLog(@"%lu",[self.feedInformation count]);
-
-    return [self.feedInformation count];
+    if(tableView == self.searchDisplayController.searchResultsTableView) {
+        return [self.filteredFeedsTitleArray count];
+    }else{
+        return [self.feedInformation count];
+    }
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"feed" forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"feed";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if ( cell == nil ) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
     NSString *noWhiteSpaceTitle = [self.feedInformation[indexPath.row][@"title"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    cell.textLabel.text = noWhiteSpaceTitle;
-    
-    //NSLog(@"%@-%lu",cell.textLabel.text,indexPath.row);
-    //if(indexPath.row == 1){
-     //   NSLog(@"%@",noWhiteSpaceTitle);
-    //}
-    //NSLog(@"%@",self.feedInformation[0][@"title"]);
-    //if([self.feedInformation count] > 1){
-    //  NSLog(@"%@",self.feedInformation[1][@"title"]);
-    //}
-    // Configure the cell...
-    
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        cell.textLabel.text = self.filteredFeedsTitleArray[indexPath.row];
+    }else{
+        cell.textLabel.text = noWhiteSpaceTitle;
+    }
+    if(indexPath.row == ([[collectArticles sharedInstance].RSSfeeds count]-1)){
+        [MBProgressHUD hideHUDForView:self.tableView animated:YES];
+    }
+
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSString *deletedArticleTitle = self.feedInformation[indexPath.row][@"title"];
+        for(int i=0;i<[[collectArticles sharedInstance].feedsTitleArray count];i++){
+            if([[collectArticles sharedInstance].feedsTitleArray[i] isEqualToString:deletedArticleTitle]){
+                [[collectArticles sharedInstance].feedsTitleArray removeObjectAtIndex:i];
+            }
+        }
+        [self.feedInformation removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else {
+        NSLog(@"Unhandled editing style! %ld", editingStyle);
+    }
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(tableView == self.searchDisplayController.searchResultsTableView){
+        [self performSegueWithIdentifier:@"showArticles" sender:tableView];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showArticles"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        //[[segue destinationViewController] setUrlString :
-        NSXMLParser *symbolParser = self.feedInformation[indexPath.row][@"url"];
-        for(NSString *url in [self.parserDictionary allKeys]){
-           // NSLog(@"%@",url);
-            //NSLog(@"%@-%@",self.parserDictionary[url],symbolParser);
-            
-            if(self.parserDictionary[url] == symbolParser){
-                //NSLog(@"1");
-                [[segue destinationViewController] setUrlString:url];
+        if(sender == self.searchDisplayController.searchResultsTableView) {
+            NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+            NSString *title = self.filteredFeedsTitleArray[indexPath.row];
+            for(int i=0;i<[self.feedInformation count];i++){
+                if([title isEqualToString:self.feedInformation[i][@"title"]]){
+                    NSXMLParser *symbolParser = self.feedInformation[i][@"url"];
+                    for(NSString *url in [self.parserDictionary allKeys]){
+                        if(self.parserDictionary[url] == symbolParser){
+                            [[segue destinationViewController] setUrlString:url];
+                            [[segue destinationViewController] setCurrentFeedTitle:self.feedInformation[indexPath.row][@"title"]];
+                        }
+                    }
+                }
+            }
+        }else{
+            NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+            NSXMLParser *symbolParser = self.feedInformation[indexPath.row][@"url"];
+            for(NSString *url in [self.parserDictionary allKeys]){
+                if(self.parserDictionary[url] == symbolParser){
+                    [[segue destinationViewController] setUrlString:url];
+                }
             }
         }
-        //NSLog(@"%@-%lu",self.feeds[indexPath.row],indexPath.row);
     }
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
+-(void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope {
+    [self.filteredFeedsTitleArray removeAllObjects];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@",searchText];
+    self.filteredFeedsTitleArray = [NSMutableArray arrayWithArray:[[collectArticles sharedInstance].feedsTitleArray filteredArrayUsingPredicate:predicate]];
+}
+
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
+    [self filterContentForSearchText:searchString scope:
+     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
     return YES;
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
+    [self filterContentForSearchText:self.searchDisplayController.searchBar.text scope:
+     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:searchOption]];
     return YES;
 }
-*/
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-*/
-
+-(void)viewWillDisappear:(BOOL)animated{
+    recordOrder = 0;
+}
 @end

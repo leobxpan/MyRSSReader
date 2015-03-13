@@ -18,18 +18,17 @@ static int sideBarInitialize = 0;
 
 @synthesize collectFunc = _collectFunc;
 
-//bool collectedOrNot = NO;
-//bool hasBeenCollectedOrNot = NO;
-
+-(void)viewWillAppear:(BOOL)animated{
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     NSURL *myURL = [NSURL URLWithString: [self.url stringByAddingPercentEscapesUsingEncoding:
                                           NSUTF8StringEncoding]];
     NSURLRequest *request = [NSURLRequest requestWithURL:myURL];
     [self.webView loadRequest:request];
     self.webView.scalesPageToFit = YES;
-    //collectedOrNot = NO;
-    
+
     if(!_collectFunc.collectedArticles){
         _collectFunc.collectedArticles = [NSMutableDictionary dictionary];
     }
@@ -39,34 +38,22 @@ static int sideBarInitialize = 0;
     if(!_collectFunc.sideBarImagesNames){
         _collectFunc.sideBarImagesNames = [NSArray array];
     }
+    
     for(NSString *urlKey in [_collectFunc.collectedArticles allKeys]){
-        //NSLog(@"%@",self.collect.currentTitle);
-        //NSLog(@"%@-%@",self.url,urlKey);
-            //NSLog(@"1");
-        //NSLog(@"%@-%@",urlKey,_collectFunc.collectedArticles[urlKey]);
-        //NSLog(@"%@",_collectFunc.collectedArticles[urlKey]);
         if([[urlKey stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:[self.url stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]]){
             _collectFunc.sideBarImages = @[
-                                //[UIImage imageNamed:@"gear"],
-                                [UIImage imageNamed:@"globe"],
-                                //[UIImage imageNamed:@"profile"],
                                 [UIImage imageNamed:@"uncollect"]
                                 ];
             _collectFunc.sideBarImagesNames = @[
-                                @"globe",
                                 @"uncollect"
                                 ];
             sideBarInitialize = 1;
-
+            break;
         }else{
             _collectFunc.sideBarImages = @[
-                                           //[UIImage imageNamed:@"gear"],
-                                           [UIImage imageNamed:@"globe"],
-                                           //[UIImage imageNamed:@"profile"],
                                            [UIImage imageNamed:@"collect"]
                                            ];
             _collectFunc.sideBarImagesNames = @[
-                                                @"globe",
                                                 @"collect"
                                                 ];
             sideBarInitialize = 1;
@@ -74,13 +61,9 @@ static int sideBarInitialize = 0;
     }
     if(!sideBarInitialize){
         _collectFunc.sideBarImages = @[
-                                       //[UIImage imageNamed:@"gear"],
-                                       [UIImage imageNamed:@"globe"],
-                                       //[UIImage imageNamed:@"profile"],
                                        [UIImage imageNamed:@"collect"]
                                        ];
         _collectFunc.sideBarImagesNames = @[
-                                            @"globe",
                                             @"collect"
                                             ];
     }
@@ -93,37 +76,38 @@ static int sideBarInitialize = 0;
 }
 
 - (void)sidebar:(RNFrostedSidebar *)sidebar didTapItemAtIndex:(NSUInteger)index {
-    if (index == 1) {
+    if (index == 0) {
         [sidebar dismissAnimated:NO];
-        if([_collectFunc.sideBarImagesNames[1] isEqualToString:@"collect"]){
+        if([_collectFunc.sideBarImagesNames[0] isEqualToString:@"collect"]){
             
             _collectFunc.sideBarImages = @[
-                                           //[UIImage imageNamed:@"gear"],
-                                           [UIImage imageNamed:@"globe"],
-                                           //[UIImage imageNamed:@"profile"],
                                            [UIImage imageNamed:@"uncollect"]
                                            ];
             _collectFunc.sideBarImagesNames = @[
-                                                @"globe",
                                                 @"uncollect"
                                                 ];
             for(NSString *urlkey in [_collectFunc.tempArticles allKeys]){
                 [_collectFunc.collectedArticles setObject:_collectFunc.tempArticles[urlkey] forKey:urlkey];
-                //NSLog(@"%@",_collectFunc.collectedArticles[urlkey]);
             }
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"收藏成功！"
+                                                                message:nil
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Ok"
+                                                      otherButtonTitles:nil];
+            [alertView show];
         }else{
-            //NSLog(@"1");
             _collectFunc.sideBarImages = @[
-                                           //[UIImage imageNamed:@"gear"],
-                                           [UIImage imageNamed:@"globe"],
-                                           //[UIImage imageNamed:@"profile"],
                                            [UIImage imageNamed:@"collect"]
                                            ];
             _collectFunc.sideBarImagesNames = @[
-                                                @"globe",
                                                 @"collect"
                                                 ];
-
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"取消收藏成功！"
+                                                                message:nil
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Ok"
+                                                      otherButtonTitles:nil];
+            [alertView show];
             [_collectFunc.collectedArticles removeObjectForKey:[self.url stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
         }
     }
@@ -135,17 +119,6 @@ static int sideBarInitialize = 0;
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

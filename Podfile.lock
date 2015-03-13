@@ -1,10 +1,19 @@
 PODS:
+  - LBBlurredImage (0.2.2)
+  - MBProgressHUD (0.9)
   - RNFrostedSidebar (0.2.0)
+  - SWTableViewCell (0.3.7)
 
 DEPENDENCIES:
+  - LBBlurredImage
+  - MBProgressHUD (~> 0.8)
   - RNFrostedSidebar (~> 0.2.0)
+  - SWTableViewCell (~> 0.3.7)
 
 SPEC CHECKSUMS:
+  LBBlurredImage: a25144dd2f8305a391b1a8cefceef189a2bb9ade
+  MBProgressHUD: 2038dbcf3dce73215abed6001657043d53aa79a8
   RNFrostedSidebar: f1d95d9b2627f13cc10e75d36e751a623eec079c
+  SWTableViewCell: 25de71898e3fcd11cf75707ef90245acf990ec03
 
 COCOAPODS: 0.35.0
