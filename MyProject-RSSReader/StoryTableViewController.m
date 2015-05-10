@@ -24,7 +24,8 @@
 @implementation StoryTableViewController
 
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated
+{
     [self.tableView reloadData];
 }
 
@@ -38,6 +39,7 @@
     [MBProgressHUD showHUDAddedTo:self.tableView animated:YES];
     [self getData : self.urlString];
 }
+
 - (IBAction)swipe:(UISwipeGestureRecognizer *)sender {
     NSArray *images = @[
                         [UIImage imageNamed:@"collect"]

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="PMi-NT-Pt2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="PMi-NT-Pt2">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
@@ -9,12 +9,12 @@
             <objects>
                 <tableViewController id="aoe-Lb-v9d" customClass="StoryTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="hkQ-k9-MXl">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="搜索文章" id="DeI-aB-XZc">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
@@ -39,7 +39,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Articles" id="RpL-Na-hvh"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="articleSearchBar" destination="DeI-aB-XZc" id="qG9-n6-wru"/>
                         <outlet property="searchDisplayController" destination="2Rc-Bb-HZf" id="xoT-Y8-6E2"/>
@@ -73,7 +73,7 @@
                         <viewControllerLayoutGuide type="bottom" id="3FL-HY-eoj"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="IOm-fH-ikY">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lPH-ve-wZB">
@@ -90,7 +90,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Web Page" id="XgW-Up-Ygw"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="webView" destination="lPH-ve-wZB" id="hm2-Cy-CKR"/>
                     </connections>
@@ -109,7 +109,7 @@
             <objects>
                 <tableViewController id="VBn-PU-04p" customClass="CollectedArticlesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="fX5-N4-9mP">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -130,23 +130,23 @@
                             <outletCollection property="gestureRecognizers" destination="BxX-Ph-dC5" appends="YES" id="gcd-Um-VfK"/>
                         </connections>
                     </tableView>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5RG-hX-AcK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <swipeGestureRecognizer direction="right" id="BxX-Ph-dC5"/>
             </objects>
-            <point key="canvasLocation" x="2645" y="-570"/>
+            <point key="canvasLocation" x="2645" y="-521"/>
         </scene>
         <!--Search Feeds Table View Controller-->
         <scene sceneID="pNj-eb-fKM">
             <objects>
                 <tableViewController id="eYM-gH-HiI" customClass="SearchFeedsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="6Vr-oJ-4Xn">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="输入关键字搜索RSS源" id="aVB-9V-BZo">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
@@ -166,7 +166,7 @@
                             <outlet property="delegate" destination="eYM-gH-HiI" id="cIi-Rq-ZGR"/>
                         </connections>
                     </tableView>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="searchDisplayController" destination="t6U-G7-Q0y" id="Itb-ZT-tGV"/>
                         <outlet property="searchRSSFeeds" destination="aVB-9V-BZo" id="4cz-3w-rfj"/>
@@ -190,12 +190,12 @@
             <objects>
                 <tableViewController id="DGn-Eo-qBn" customClass="FeedsTableTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7Jw-af-hrE">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="搜索文章源" id="6vQ-Xh-xP9">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
@@ -232,7 +232,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="feedSearchBar" destination="6vQ-Xh-xP9" id="ben-9d-EbL"/>
                         <outlet property="searchDisplayController" destination="0fN-OK-M2f" id="1V4-fj-ukg"/>
@@ -262,7 +262,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="PMi-NT-Pt2" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="PiQ-1T-LkH">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -274,7 +274,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rtl-2B-7fl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="985" y="321"/>
+            <point key="canvasLocation" x="1021" y="321"/>
         </scene>
     </scenes>
     <resources>
@@ -282,6 +282,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="gHa-GX-IGF"/>
-        <segue reference="9h8-I9-DI0"/>
+        <segue reference="yXB-mM-E1E"/>
     </inferredMetricsTieBreakers>
 </document>

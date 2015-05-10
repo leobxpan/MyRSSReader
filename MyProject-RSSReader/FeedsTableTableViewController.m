@@ -10,12 +10,12 @@
 
 @interface FeedsTableTableViewController ()
 
-@property NSMutableDictionary *currentSection;
-@property NSMutableString *storyString;
-@property NSMutableArray *feeds;
-@property NSMutableArray *feedInformation;
-@property NSMutableDictionary *parserDictionary;
-@property (strong,nonatomic) NSMutableArray *filteredFeedsTitleArray;
+@property NSMutableDictionary *currentSection;                                  //The currently parsed section.
+@property NSMutableString *storyString;                                         //The appending string while parsing.
+@property NSMutableArray *feeds;                                                //The original RSS feeds.
+@property NSMutableArray *feedInformation;                                      //I store parsed data here.
+@property NSMutableDictionary *parserDictionary;                                //I use parser as an identifier.
+@property (strong,nonatomic) NSMutableArray *filteredFeedsTitleArray;           //Used to store the feeds filtered by the keyword.
 @property (strong, nonatomic) IBOutlet UISearchBar *feedSearchBar;
 
 @end
@@ -25,8 +25,9 @@
 static int recordOrder = 0;
 static int recordViewAppear = 0;
 
--(void)viewWillAppear:(BOOL)animated{
-    if((!recordViewAppear) && ([collectArticles sharedInstance].recordAddedNewFeedsOrNot - [collectArticles sharedInstance].helpRecordAddedNewFeedsOrNot)){
+-(void)viewWillAppear:(BOOL)animated
+{
+    if((!recordViewAppear) && ([collectArticles sharedInstance].recordAddedNewFeedsOrNot - [collectArticles sharedInstance].helpRecordAddedNewFeedsOrNot)){         //If we have added a new feed, then we need to reload the tableview.
         [self.feedInformation removeAllObjects];
         [MBProgressHUD showHUDAddedTo:self.tableView animated:YES];
         [collectArticles sharedInstance].helpRecordAddedNewFeedsOrNot = [collectArticles sharedInstance].recordAddedNewFeedsOrNot;
@@ -35,19 +36,25 @@ static int recordViewAppear = 0;
         }
         [self.tableView reloadData];
     }
+    
     recordViewAppear = 0;
+    
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
     recordViewAppear = 1;
     [collectArticles sharedInstance].helpRecordAddedNewFeedsOrNot = 0;
     [collectArticles sharedInstance].recordAddedNewFeedsOrNot = 0;
-    self.filteredFeedsTitleArray = [NSMutableArray arrayWithCapacity:[self.feeds count]];
     
+    //Some initialization.
+    self.filteredFeedsTitleArray = [NSMutableArray arrayWithCapacity:[self.feeds count]];
     self.feedInformation = [NSMutableArray array];
     self.parserDictionary = [NSMutableDictionary dictionary];
-    NSArray *array = @[@"http://images.apple.com/main/rss/hotnews/hotnews.rss",
+    NSArray *array = @[
+                     @"http://images.apple.com/main/rss/hotnews/hotnews.rss",
                      @"http://songshuhui.net/feed",
                      @"http://meiwenrishang.com/rss",
                      @"http://www.zhihu.com/rss",
@@ -61,12 +68,16 @@ static int recordViewAppear = 0;
     }
     [MBProgressHUD showHUDAddedTo:self.tableView animated:YES];
 
+    //Asynchronously start parsing RSS feeds.
     for(int i=0;i<[[collectArticles sharedInstance].RSSfeeds count];i++){
         [self getData:[collectArticles sharedInstance].RSSfeeds[i]];
     }
-}
-- (IBAction)swipe:(UISwipeGestureRecognizer *)sender {
     
+}
+
+//Swipe to call out the sidebar.
+- (IBAction)swipe:(UISwipeGestureRecognizer *)sender
+{
     NSArray *images = @[
                         [UIImage imageNamed:@"collect"]
                         ];
@@ -77,9 +88,9 @@ static int recordViewAppear = 0;
     
 }
 
-
-- (IBAction)clickBurger {
-    
+//An equivalent of the swipe gesture above.
+- (IBAction)clickBurger
+{
     NSArray *images = @[
                         [UIImage imageNamed:@"collect"]
                         ];
@@ -90,18 +101,23 @@ static int recordViewAppear = 0;
 
 }
 
-- (void)sidebar:(RNFrostedSidebar *)sidebar didTapItemAtIndex:(NSUInteger)index {
+//Actions when clicking on different items in sidebar.
+- (void)sidebar:(RNFrostedSidebar *)sidebar didTapItemAtIndex:(NSUInteger)index
+{
     if (index == 0) {
         [sidebar dismissAnimated:NO];
         [self performSegueWithIdentifier:@"showCollectedArticles" sender:nil];
     }
 }
 
+//About what RSS parser does.
 -(void)getData : (NSString *)urlString
 {
+    //Generate a url request.
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
+    //Initialize the parser.
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     operation.responseSerializer = [AFXMLParserResponseSerializer serializer];
     operation.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/rss+xml"];
@@ -113,7 +129,7 @@ static int recordViewAppear = 0;
         XMLParser.delegate = self;
         [XMLParser parse];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        //When an error occurs while parsing.
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Loading Data"
                                                             message:[error localizedDescription]
                                                            delegate:nil
@@ -124,37 +140,50 @@ static int recordViewAppear = 0;
         
     }];
     
+    //Start parsing.
     [operation start];
     
 }
 
--(void)parserDidStartDocument:(NSXMLParser *)parser{
+//Launch when the parser start parsing a new document.
+-(void)parserDidStartDocument:(NSXMLParser *)parser
+{
     self.storyString = [[NSMutableString alloc]init];
     self.currentSection = [NSMutableDictionary dictionary];
 }
 
--(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict{
+//Launch when the parser encounters a new tag, which in RSS files is surrounded by <>.
+-(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
+{
     if([elementName isEqualToString:@"item"]){
+
         [self.feedInformation addObject:[self.currentSection mutableCopy]];
-        self.currentSection = [NSMutableDictionary dictionary];
+
+        //Due to the Asynchronous loading pattern, I need some measures to help me figure out the correct order of the feeds so I can put them on table view correctly.
         self.feedInformation[recordOrder][@"url"] = parser;
         recordOrder++;
+        
         [parser abortParsing];
         [self.tableView reloadData];
     }
 }
 
--(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string{
+//Launch when the parser encounters the characters between two tags.
+-(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
     [self.storyString appendString:string];
 }
 
--(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName{
+//Launch when the parser encounters an ending tag.
+-(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
     if(elementName){
         if([elementName isEqualToString:@"title"]){
             if([collectArticles sharedInstance].feedsTitleArray == nil){
                 [collectArticles sharedInstance].feedsTitleArray = [NSMutableArray array];
                 [[collectArticles sharedInstance].feedsTitleArray addObject:[[self.storyString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] copy]];
             }else{
+                //The title may appear multiply times, so I do the following judgements.
                 int recordIfTitleHasBeenAround = 0;
                 for(int i=0;i<[[collectArticles sharedInstance].feedsTitleArray count];i++){
                     if([[self.storyString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:[collectArticles sharedInstance].feedsTitleArray[i]]){
@@ -173,28 +202,27 @@ static int recordViewAppear = 0;
 }
 
 -(void)parserDidEndDocument:(NSXMLParser *)parser{
-}
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
-
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if(tableView == self.searchDisplayController.searchResultsTableView) {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if(tableView == self.searchDisplayController.searchResultsTableView) {          //This means the current view is the search view.
         return [self.filteredFeedsTitleArray count];
     }else{
         return [self.feedInformation count];
     }
 }
 
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //I may always need to do the following initialization.
     static NSString *CellIdentifier = @"feed";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if ( cell == nil ) {
@@ -214,7 +242,9 @@ static int recordViewAppear = 0;
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+//The following implements the swipe-delete function.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSString *deletedArticleTitle = self.feedInformation[indexPath.row][@"title"];
         for(int i=0;i<[[collectArticles sharedInstance].feedsTitleArray count];i++){
@@ -229,13 +259,15 @@ static int recordViewAppear = 0;
     }
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if(tableView == self.searchDisplayController.searchResultsTableView){
         [self performSegueWithIdentifier:@"showArticles" sender:tableView];
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
     if ([[segue identifier] isEqualToString:@"showArticles"]) {
         if(sender == self.searchDisplayController.searchResultsTableView) {
             NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
@@ -263,7 +295,9 @@ static int recordViewAppear = 0;
     }
 }
 
--(void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope {
+//The following three functions are about the search bar.
+-(void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
+{
     [self.filteredFeedsTitleArray removeAllObjects];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@",searchText];
     self.filteredFeedsTitleArray = [NSMutableArray arrayWithArray:[[collectArticles sharedInstance].feedsTitleArray filteredArrayUsingPredicate:predicate]];
@@ -284,4 +318,10 @@ static int recordViewAppear = 0;
 -(void)viewWillDisappear:(BOOL)animated{
     recordOrder = 0;
 }
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
+
 @end
